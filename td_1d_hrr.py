@@ -7,7 +7,7 @@ import hrr
 
 #-------------------------------Variable Declerations----------------------------
 
-bias = 0
+bias = 1
 
 gamma = 0.9         # Future Discount
 
@@ -17,7 +17,7 @@ td_lambda = 0.3     # The eligibility trace lambda
 
 worldSize = 30
 
-goal = 19
+goal = randrange(0, worldSize)
 
 lengthHRRs = 128
 
@@ -48,7 +48,7 @@ for i in range(0, 5000):
     eligibility = np.zeros(lengthHRRs)
 
     # Set the starting location to a random state
-    currentLocation = 0
+    currentLocation = randrange(0, worldSize)
 
     for j in range (0, 100):
 
@@ -62,40 +62,41 @@ for i in range(0, 5000):
             previousValue = currentValue
             td_error = currentReward - previousValue
 
-            for i in range(lengthHRRs):
-                (eligibility[i] * td_lambda) + world[previousLocation, ]
-                weights[i] + (lrate * eligibility[i] * td_error)
 
-            bias = bias + lrate * td_error
+            eligibility = (eligibility * td_lambda) + world[previousLocation, ]
+            weights = weights + (lrate * eligibility * td_error)
+
+            # bias = bias + lrate * td_error
 
             break
 
-        if currentLocation == 0:
-            leftValue = np.dot(world[worldSize - 1], weights) + bias
-        else:
-            leftValue = np.dot(world[currentLocation - 1], weights) + bias
+        rightLocation = currentLocation + 1
+        leftLocation = currentLocation - 1
 
-        if currentLocation == worldSize - 1:
-            rightValue = np.dot(world[0], weights) + bias
-        else:
-            rightValue = np.dot(world[currentLocation + 1], weights) + bias
+        if rightLocation == worldSize:
+            rightLocation = 0
+
+        if leftLocation == -1:
+            leftLocation =currentReward = reward[currentLocation] worldSize - 1
+
+        leftValue = np.dot(world[leftLocation, ], weights) + bias
+        rightValue = np.dot(world[rightLocation, ], weights) + bias
 
         previousLocation = currentLocation
         previousValue = currentValue
 
         if leftValue <= rightValue:
-            currentLocation = currentLocation + 1
+            currentLocation = rightLocation
             currentValue = rightValue
         elif rightValue < leftValue:
-            currentLocation = currentLocation - 1
+            currentLocation = leftLocation
             currentValue = leftValue
-
-        currentReward = reward[currentLocation]
 
         td_error = (currentReward + gamma * currentValue) - previousValue
 
-        for i in range(lengthHRRs):
-            (eligibility[i] * td_lambda) + world[previousLocation, ]
-            weights[i] + (lrate * eligibility[i] * td_error)
+        eligibility = (eligibility * td_lambda) + world[previousLocation, ]
+        weights = weights + (lrate * eligibility * td_error)
 
-        bias = bias + lrate * td_error
+        # bias = bias + lrate * td_error
+
+print(np.apply_along_axis(np.dot, 1, world, weights) + bias)
