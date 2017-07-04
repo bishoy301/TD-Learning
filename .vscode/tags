@@ -1,0 +1,59 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+bias	../td_1d_hrr.py	/^bias = 1$/;"	kind:variable	line:10
+compose	../hrr.py	/^def compose(x,y):$/;"	kind:function	line:48
+convolve	../hrr.py	/^def convolve(x,y):$/;"	kind:function	line:32
+correlate	../hrr.py	/^def correlate(x,y,invf=inv):$/;"	kind:function	line:44
+currentLocation	../td_1d_hrr.py	/^            currentLocation = leftLocation$/;"	kind:variable	line:92
+currentLocation	../td_1d_hrr.py	/^            currentLocation = rightLocation$/;"	kind:variable	line:89
+currentLocation	../td_1d_hrr.py	/^    currentLocation = randrange(0, worldSize)$/;"	kind:variable	line:51
+currentReward	../td_1d_hrr.py	/^        currentReward = reward[currentLocation]$/;"	kind:variable	line:56
+currentValue	../td_1d_hrr.py	/^            currentValue = leftValue$/;"	kind:variable	line:93
+currentValue	../td_1d_hrr.py	/^            currentValue = rightValue$/;"	kind:variable	line:90
+currentValue	../td_1d_hrr.py	/^        currentValue = np.dot(world[currentLocation, ], weights) + bias$/;"	kind:variable	line:58
+decompose	../hrr.py	/^def decompose(x,y):$/;"	kind:function	line:59
+default_reward	../td_1d_hrr.py	/^default_reward = 0$/;"	kind:variable	line:24
+eligibility	../td_1d_hrr.py	/^            eligibility = (eligibility * td_lambda) + world[previousLocation, ]$/;"	kind:variable	line:66
+eligibility	../td_1d_hrr.py	/^        eligibility = (eligibility * td_lambda) + world[previousLocation, ]$/;"	kind:variable	line:97
+eligibility	../td_1d_hrr.py	/^    eligibility = np.zeros(lengthHRRs)$/;"	kind:variable	line:48
+eligibility	../td_1d_hrr.py	/^eligibility = np.zeros(lengthHRRs)$/;"	kind:variable	line:28
+gamma	../td_1d_hrr.py	/^gamma = 0.9         # Future Discount$/;"	kind:variable	line:12
+goal	../td_1d_hrr.py	/^goal = randrange(0, worldSize)$/;"	kind:variable	line:20
+hrr	../hrr.py	/^def hrr(length,normalized=False):$/;"	kind:function	line:5
+hrr	../td_1d_hrr.py	/^import hrr$/;"	kind:namespace	line:6
+hrr.py	../hrr.py	1;"	kind:file	line:1
+hrrs	../hrr.py	/^def hrrs(length,n=1,normalized=False):$/;"	kind:function	line:19
+inv	../hrr.py	/^def inv(x):$/;"	kind:function	line:23
+leftLocation	../td_1d_hrr.py	/^        leftLocation = currentLocation - 1$/;"	kind:variable	line:74
+leftValue	../td_1d_hrr.py	/^        leftValue = np.dot(world[leftLocation, ], weights) + bias$/;"	kind:variable	line:82
+lengthHRRs	../td_1d_hrr.py	/^lengthHRRs = 128$/;"	kind:variable	line:22
+lrate	../td_1d_hrr.py	/^lrate = 0.1$/;"	kind:variable	line:14
+mcompose	../hrr.py	/^def mcompose(x):$/;"	kind:function	line:54
+mconvolve	../hrr.py	/^def mconvolve(x):$/;"	kind:function	line:36
+np	../td_1d_hrr.py	/^import numpy as np$/;"	kind:namespace	line:4
+numpy	../hrr.py	/^import numpy$/;"	kind:namespace	line:3
+oconvolve	../hrr.py	/^def oconvolve(x,y):$/;"	kind:function	line:40
+pinv	../hrr.py	/^def pinv(x):$/;"	kind:function	line:28
+previousLocation	../td_1d_hrr.py	/^            previousLocation = currentLocation$/;"	kind:variable	line:61
+previousLocation	../td_1d_hrr.py	/^        previousLocation = currentLocation$/;"	kind:variable	line:85
+previousValue	../td_1d_hrr.py	/^            previousValue = currentValue$/;"	kind:variable	line:62
+previousValue	../td_1d_hrr.py	/^        previousValue = currentValue$/;"	kind:variable	line:86
+randint	../td_1d_hrr.py	/^from random import randrange, randint$/;"	kind:namespace	line:5
+randrange	../td_1d_hrr.py	/^from random import randrange, randint$/;"	kind:namespace	line:5
+reward	../td_1d_hrr.py	/^reward = np.zeros(worldSize)$/;"	kind:variable	line:29
+rightLocation	../td_1d_hrr.py	/^            rightLocation = 0$/;"	kind:variable	line:77
+rightLocation	../td_1d_hrr.py	/^        rightLocation = currentLocation + 1$/;"	kind:variable	line:73
+rightValue	../td_1d_hrr.py	/^        rightValue = np.dot(world[rightLocation, ], weights) + bias$/;"	kind:variable	line:83
+td_1d_hrr.py	../td_1d_hrr.py	1;"	kind:file	line:1
+td_error	../td_1d_hrr.py	/^            td_error = currentReward - previousValue$/;"	kind:variable	line:63
+td_error	../td_1d_hrr.py	/^        td_error = (currentReward + gamma * currentValue) - previousValue$/;"	kind:variable	line:95
+td_lambda	../td_1d_hrr.py	/^td_lambda = 0.3     # The eligibility trace lambda$/;"	kind:variable	line:16
+weights	../td_1d_hrr.py	/^            weights = weights + (lrate * eligibility * td_error)$/;"	kind:variable	line:67
+weights	../td_1d_hrr.py	/^        weights = weights + (lrate * eligibility * td_error)$/;"	kind:variable	line:98
+weights	../td_1d_hrr.py	/^weights = hrr.hrr(lengthHRRs)$/;"	kind:variable	line:33
+world	../td_1d_hrr.py	/^world = np.zeros([worldSize,lengthHRRs])$/;"	kind:variable	line:26
+worldSize	../td_1d_hrr.py	/^worldSize = 30$/;"	kind:variable	line:18
