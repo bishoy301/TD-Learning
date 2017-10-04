@@ -39,7 +39,7 @@ leftLocation	../td_1d_hrr.py	/^        leftLocation = currentLocation - 1$/;"	ki
 leftValue	../td_1d_hrr.py	/^        leftValue = np.dot(world[leftLocation, ], weights) + bias$/;"	kind:variable	line:82
 lengthHRRs	../td_1d_hrr.py	/^lengthHRRs = 128$/;"	kind:variable	line:22
 lengthHRRs	../td_2d_hrr.py	/^lengthHRRs = 128$/;"	kind:variable	line:11
-lrate	../td_1d_hrr.py	/^lrate = 0.1         # The learning rate of the agent$/;"	kind:variable	line:14
+lrate	../td_1d_hrr.py	/^lrate = 0.1$/;"	kind:variable	line:14
 lrate	../td_2d_hrr.py	/^lrate = 0.1$/;"	kind:variable	line:9
 mcompose	../hrr.py	/^def mcompose(x):$/;"	kind:function	line:54
 mconvolve	../hrr.py	/^def mconvolve(x):$/;"	kind:function	line:36
