@@ -14,10 +14,22 @@ lengthHRR = 1024
 signalNumber = 3
 defaultReward = 0
 
+colorDimension = 0.0
+stateDimension = 0.0
+memoryCandidates = np.zeros(4)
+
 world       = np.zeros([worldSize, lengthHRR])
 signals     = np.zeros([signalNumber, lengthHRR])
 eligibility = np.zeros(lengthHRR)
-reward      = np.zeros(lengthHRR)
+reward      = np.zeros([signalNumber, lengthHRR])
 
 weights = hrr.hrr(lengthHRR)
+
+reward[0][redGoal] = 1
+reward[1][greenGoal] = 1
+
+for i in range(worldSize):
+    world[i,] = hrr.hrr(lengthHRR)
+    
+print(world)
 
