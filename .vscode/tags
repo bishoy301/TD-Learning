@@ -4,78 +4,115 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+LTM	../hrr.py	/^class LTM:$/;"	kind:class	line:85
+N	../hrr.py	/^    N = 1024$/;"	kind:variable	line:93
 Reward	../td_2d_hrr.py	/^def Reward(state):$/;"	kind:function	line:19
 Value	../td_2d_hrr.py	/^def Value(currentLocation):$/;"	kind:function	line:23
+__del__	../hrr.py	/^    def __del__(self):$/;"	kind:member	line:102
+__init__	../hrr.py	/^    def __init__(self,N=1024,normalized=False):$/;"	kind:member	line:96
 attention_filter.py	../attention_filter.py	1;"	kind:file	line:1
 bias	../attention_filter.py	/^bias = 1$/;"	kind:variable	line:6
 bias	../td_1d_hrr.py	/^bias = 1$/;"	kind:variable	line:10
 bias	../td_2d_hrr.py	/^bias = 1$/;"	kind:variable	line:7
-compose	../hrr.py	/^def compose(x,y):$/;"	kind:function	line:48
-convolve	../hrr.py	/^def convolve(x,y):$/;"	kind:function	line:32
-correlate	../hrr.py	/^def correlate(x,y,invf=inv):$/;"	kind:function	line:44
+candidateThreshold	../attention_filter.py	/^candidateThreshold = 0.0$/;"	kind:variable	line:19
+colorDimension	../attention_filter.py	/^colorDimension = 0.0$/;"	kind:variable	line:17
+compose	../hrr.py	/^def compose(x,y):$/;"	kind:function	line:57
+convolve	../hrr.py	/^def convolve(x,y):$/;"	kind:function	line:41
+correlate	../hrr.py	/^def correlate(x,y,invf=pinv):$/;"	kind:function	line:53
+currentLocation	../attention_filter.py	/^    currentLocation = randrange(0, worldSize)$/;"	kind:variable	line:46
 currentLocation	../td_1d_hrr.py	/^            currentLocation = leftLocation$/;"	kind:variable	line:92
 currentLocation	../td_1d_hrr.py	/^            currentLocation = rightLocation$/;"	kind:variable	line:89
 currentLocation	../td_1d_hrr.py	/^    currentLocation = randrange(0, worldSize)$/;"	kind:variable	line:51
 currentLocation	../td_2d_hrr.py	/^currentLocation = randrange(0, worldSize)$/;"	kind:variable	line:17
+currentReward	../attention_filter.py	/^        currentReward = reward[currentTask][currentLocation]$/;"	kind:variable	line:54
 currentReward	../td_1d_hrr.py	/^        currentReward = reward[currentLocation]$/;"	kind:variable	line:56
+currentState	../attention_filter.py	/^        currentState = hrr.convolve(hrr.convolve(world[currentLocation, ], signals[currentTask, ]), workingMemory)$/;"	kind:variable	line:55
+currentTask	../attention_filter.py	/^    currentTask = randint(1, 2)$/;"	kind:variable	line:50
+currentValue	../attention_filter.py	/^        currentValue = np.dot(currentState, weights) + bias$/;"	kind:variable	line:56
 currentValue	../td_1d_hrr.py	/^            currentValue = leftValue$/;"	kind:variable	line:93
 currentValue	../td_1d_hrr.py	/^            currentValue = rightValue$/;"	kind:variable	line:90
 currentValue	../td_1d_hrr.py	/^        currentValue = np.dot(world[currentLocation, ], weights) + bias$/;"	kind:variable	line:58
-decompose	../hrr.py	/^def decompose(x,y):$/;"	kind:function	line:59
+decode	../hrr.py	/^    def decode(self,q):$/;"	kind:member	line:143
+decompose	../hrr.py	/^def decompose(x,y):$/;"	kind:function	line:68
 defaultReward	../attention_filter.py	/^defaultReward = 0$/;"	kind:variable	line:15
 default_reward	../td_1d_hrr.py	/^default_reward = 0$/;"	kind:variable	line:24
 default_reward	../td_2d_hrr.py	/^default_reward = 0.0$/;"	kind:variable	line:12
-eligibility	../attention_filter.py	/^eligibility = np.zeros(lengthHRR)$/;"	kind:variable	line:19
+eligibility	../attention_filter.py	/^        eligibility = td_lambda * eligibility$/;"	kind:variable	line:63
+eligibility	../attention_filter.py	/^    eligibility = np.zeros(lengthHRR)$/;"	kind:variable	line:44
+eligibility	../attention_filter.py	/^eligibility = np.zeros(lengthHRR)$/;"	kind:variable	line:26
 eligibility	../td_1d_hrr.py	/^            eligibility = (eligibility * td_lambda) + world[previousLocation, ]$/;"	kind:variable	line:66
 eligibility	../td_1d_hrr.py	/^        eligibility = (eligibility * td_lambda) + world[previousLocation, ]$/;"	kind:variable	line:97
 eligibility	../td_1d_hrr.py	/^    eligibility = np.zeros(lengthHRRs)$/;"	kind:variable	line:48
 eligibility	../td_1d_hrr.py	/^eligibility = np.zeros(lengthHRRs)$/;"	kind:variable	line:28
+encode	../hrr.py	/^    def encode(self,q):$/;"	kind:member	line:116
+epsilon_a	../attention_filter.py	/^epsilon_a = 0.03$/;"	kind:variable	line:21
+epsilon_wm	../attention_filter.py	/^epsilon_wm = 0.03$/;"	kind:variable	line:22
 gamma	../attention_filter.py	/^gamma = 0.9$/;"	kind:variable	line:7
 gamma	../td_1d_hrr.py	/^gamma = 0.9         # Future Discount$/;"	kind:variable	line:12
 gamma	../td_2d_hrr.py	/^gamma = 0.9$/;"	kind:variable	line:8
+gc	../hrr.py	/^import gc$/;"	kind:namespace	line:7
+glob	../hrr.py	/^import glob$/;"	kind:namespace	line:6
 goal	../td_1d_hrr.py	/^goal = randrange(0, worldSize)$/;"	kind:variable	line:20
 greenGoal	../attention_filter.py	/^greenGoal = randrange(0, worldSize)$/;"	kind:variable	line:12
 hrr	../attention_filter.py	/^import hrr$/;"	kind:namespace	line:2
-hrr	../hrr.py	/^def hrr(length,normalized=False):$/;"	kind:function	line:5
+hrr	../hrr.py	/^def hrr(length,normalized=False):$/;"	kind:function	line:10
 hrr	../td_1d_hrr.py	/^import hrr$/;"	kind:namespace	line:6
 hrr	../td_2d_hrr.py	/^import hrr$/;"	kind:namespace	line:5
 hrr.py	../hrr.py	1;"	kind:file	line:1
-hrrs	../hrr.py	/^def hrrs(length,n=1,normalized=False):$/;"	kind:function	line:19
-inv	../hrr.py	/^def inv(x):$/;"	kind:function	line:23
+hrri	../hrr.py	/^def hrri(length):$/;"	kind:function	line:24
+hrrs	../hrr.py	/^def hrrs(length,n=1,normalized=False):$/;"	kind:function	line:28
+inv	../hrr.py	/^def inv(x):$/;"	kind:function	line:32
+itertools	../hrr.py	/^import itertools$/;"	kind:namespace	line:8
 leftLocation	../td_1d_hrr.py	/^        leftLocation = currentLocation - 1$/;"	kind:variable	line:74
 leftValue	../td_1d_hrr.py	/^        leftValue = np.dot(world[leftLocation, ], weights) + bias$/;"	kind:variable	line:82
 lengthHRR	../attention_filter.py	/^lengthHRR = 1024$/;"	kind:variable	line:13
 lengthHRRs	../td_1d_hrr.py	/^lengthHRRs = 128$/;"	kind:variable	line:22
 lengthHRRs	../td_2d_hrr.py	/^lengthHRRs = 128$/;"	kind:variable	line:11
+lookup	../hrr.py	/^    def lookup(self,q):$/;"	kind:member	line:108
 lrate	../attention_filter.py	/^lrate = 0.3$/;"	kind:variable	line:8
 lrate	../td_1d_hrr.py	/^lrate = 0.1$/;"	kind:variable	line:14
 lrate	../td_2d_hrr.py	/^lrate = 0.1$/;"	kind:variable	line:9
-mcompose	../hrr.py	/^def mcompose(x):$/;"	kind:function	line:54
-mconvolve	../hrr.py	/^def mconvolve(x):$/;"	kind:function	line:36
+mcompose	../hrr.py	/^def mcompose(x):$/;"	kind:function	line:63
+mconvolve	../hrr.py	/^def mconvolve(x):$/;"	kind:function	line:45
+memoryCandidates	../attention_filter.py	/^            memoryCandidates = np.array([signals[0, ], world[currentLocation, ], workingMemory, signals[currentTask, ]])$/;"	kind:variable	line:74
+memoryCandidates	../attention_filter.py	/^            memoryCandidates = np.array([signals[0, ], world[currentLocation, ], workingMemory])$/;"	kind:variable	line:72
+memoryCandidates	../attention_filter.py	/^            memoryCandidates = np.array([workingMemory, signals[currentTask, ], signals[0, ]])$/;"	kind:variable	line:70
+normalized	../hrr.py	/^    normalized = False$/;"	kind:variable	line:94
 np	../attention_filter.py	/^import numpy as np$/;"	kind:namespace	line:3
 np	../td_1d_hrr.py	/^import numpy as np$/;"	kind:namespace	line:4
 np	../td_2d_hrr.py	/^import numpy as np$/;"	kind:namespace	line:4
 numpy	../hrr.py	/^import numpy$/;"	kind:namespace	line:3
-oconvolve	../hrr.py	/^def oconvolve(x,y):$/;"	kind:function	line:40
-pinv	../hrr.py	/^def pinv(x):$/;"	kind:function	line:28
+oconvolve	../hrr.py	/^def oconvolve(x,y):$/;"	kind:function	line:49
+os	../hrr.py	/^import os$/;"	kind:namespace	line:5
+pinv	../hrr.py	/^def pinv(x):$/;"	kind:function	line:37
+pow	../hrr.py	/^def pow(x,k):$/;"	kind:function	line:72
+previousLocation	../attention_filter.py	/^        previousLocation = currentLocation$/;"	kind:variable	line:58
 previousLocation	../td_1d_hrr.py	/^            previousLocation = currentLocation$/;"	kind:variable	line:61
 previousLocation	../td_1d_hrr.py	/^        previousLocation = currentLocation$/;"	kind:variable	line:85
+previousState	../attention_filter.py	/^        previousState = currentState$/;"	kind:variable	line:59
+previousTask	../attention_filter.py	/^        previousTask = currentTask$/;"	kind:variable	line:61
+previousValue	../attention_filter.py	/^        previousValue = currentValue$/;"	kind:variable	line:62
 previousValue	../td_1d_hrr.py	/^            previousValue = currentValue$/;"	kind:variable	line:62
 previousValue	../td_1d_hrr.py	/^        previousValue = currentValue$/;"	kind:variable	line:86
+previousWM	../attention_filter.py	/^        previousWM = workingMemory$/;"	kind:variable	line:60
+print	../hrr.py	/^    def print(self):$/;"	kind:member	line:169
 randint	../attention_filter.py	/^from random import randrange, randint$/;"	kind:namespace	line:1
 randint	../td_1d_hrr.py	/^from random import randrange, randint$/;"	kind:namespace	line:5
 randrange	../attention_filter.py	/^from random import randrange, randint$/;"	kind:namespace	line:1
 randrange	../td_1d_hrr.py	/^from random import randrange, randint$/;"	kind:namespace	line:5
 randrange	../td_2d_hrr.py	/^from random import randrange$/;"	kind:namespace	line:3
 redGoal	../attention_filter.py	/^redGoal = randrange(0, worldSize)$/;"	kind:variable	line:11
-reward	../attention_filter.py	/^reward      = np.zeros([signalNumber, lengthHRR])$/;"	kind:variable	line:20
+reward	../attention_filter.py	/^reward = np.zeros([signalNumber, lengthHRR])$/;"	kind:variable	line:27
 reward	../td_1d_hrr.py	/^reward = np.zeros(worldSize)$/;"	kind:variable	line:29
 reward	../td_2d_hrr.py	/^reward = np.zeros(lengthHRRs)$/;"	kind:variable	line:13
 rightLocation	../td_1d_hrr.py	/^            rightLocation = 0$/;"	kind:variable	line:77
 rightLocation	../td_1d_hrr.py	/^        rightLocation = currentLocation + 1$/;"	kind:variable	line:73
 rightValue	../td_1d_hrr.py	/^        rightValue = np.dot(world[rightLocation, ], weights) + bias$/;"	kind:variable	line:83
+shelve	../hrr.py	/^import shelve$/;"	kind:namespace	line:4
 signalNumber	../attention_filter.py	/^signalNumber = 3$/;"	kind:variable	line:14
-signals	../attention_filter.py	/^signals     = np.zeros([signalNumber, lengthHRR])$/;"	kind:variable	line:18
+signals	../attention_filter.py	/^signals = np.zeros([signalNumber, lengthHRR])$/;"	kind:variable	line:25
+stateDimension	../attention_filter.py	/^stateDimension = 0.0$/;"	kind:variable	line:18
+store	../hrr.py	/^    store = None$/;"	kind:variable	line:87
 td_1d_hrr.py	../td_1d_hrr.py	1;"	kind:file	line:1
 td_2d_hrr.py	../td_2d_hrr.py	1;"	kind:file	line:1
 td_error	../td_1d_hrr.py	/^            td_error = currentReward - previousValue$/;"	kind:variable	line:63
@@ -83,12 +120,15 @@ td_error	../td_1d_hrr.py	/^        td_error = (currentReward + gamma * currentVa
 td_lambda	../attention_filter.py	/^td_lambda = 0.5$/;"	kind:variable	line:9
 td_lambda	../td_1d_hrr.py	/^td_lambda = 0.3     # The eligibility trace lambda$/;"	kind:variable	line:16
 td_lambda	../td_2d_hrr.py	/^td_lambda = 0.3$/;"	kind:variable	line:10
-weights	../attention_filter.py	/^weights = hrr.hrr(lengthHRR)$/;"	kind:variable	line:22
+tmpdir	../hrr.py	/^    tmpdir = "\/dev\/shm\/"$/;"	kind:variable	line:89
+unpack	../hrr.py	/^    def unpack(self,q):$/;"	kind:member	line:155
+weights	../attention_filter.py	/^weights = hrr.hrr(lengthHRR)$/;"	kind:variable	line:29
 weights	../td_1d_hrr.py	/^            weights = weights + (lrate * eligibility * td_error)$/;"	kind:variable	line:67
 weights	../td_1d_hrr.py	/^        weights = weights + (lrate * eligibility * td_error)$/;"	kind:variable	line:98
 weights	../td_1d_hrr.py	/^weights = hrr.hrr(lengthHRRs)$/;"	kind:variable	line:33
 weights	../td_2d_hrr.py	/^weights = hrr.hrr(lengthHRRs)$/;"	kind:variable	line:16
-world	../attention_filter.py	/^world       = np.zeros([worldSize, lengthHRR])$/;"	kind:variable	line:17
+workingMemory	../attention_filter.py	/^    workingMemory = signals[0, ]$/;"	kind:variable	line:48
+world	../attention_filter.py	/^world = np.zeros([worldSize, lengthHRR])$/;"	kind:variable	line:24
 world	../td_1d_hrr.py	/^world = np.zeros([worldSize,lengthHRRs])$/;"	kind:variable	line:26
 world	../td_2d_hrr.py	/^world = np.zeros(lengthHRRs)$/;"	kind:variable	line:15
 worldSize	../attention_filter.py	/^worldSize = 20$/;"	kind:variable	line:10
