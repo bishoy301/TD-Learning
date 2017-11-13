@@ -28,7 +28,7 @@ enum WM {
 	current_sig,
     nothing
 };
-    
+
 int hrr_size = 1024;
 DFTTool tool(hrr_size);
 
@@ -43,13 +43,13 @@ WM memoryUpdate(HRR current_memory, HRR current_signal, HRR nothing_state, HRR c
 int main() {
     int number_episodes      = 1000;
     int steps                = 100;
-    
+
     double default_reward    = 0;
     double goal_reward       = 1;
-    int rand_goal1           = rand() % (WORLD_SIZE);
-    int rand_goal2           = rand() % (WORLD_SIZE);
+    int rand_goal1           = 0;
+    int rand_goal2           = 10;
     double previous_reward;
-    
+
     int bias                 = 0;
     double gamma             = 0.9;
     double learn_rate        = 0.3;
@@ -62,8 +62,8 @@ int main() {
     HRR weight(hrr_size);
     HRR eligibility(hrr_size);
     int reward[NUMBER_SIGNALS][WORLD_SIZE];
-    
-    
+
+
     for (int i = 0; i < WORLD_SIZE; ++i) {
         world[i].push_back(tool.hrr());
     }
@@ -111,9 +111,9 @@ int main() {
             for (int i = 0; i < eligibility.size(); ++i) {
                 eligibility[i] *= lambda;
             }
-            
+
             HRR nothing_state = memory[0];
-            
+
             // Update of Working Memory
             WM memory_update = memoryUpdate(current_memory, current_signal, nothing_state, current_location_HRR, weight);
 
@@ -148,7 +148,7 @@ int main() {
                 }
 
                 bias += learn_rate * td_error;
-                
+
                 break;
             }
 
@@ -157,11 +157,11 @@ int main() {
             for (int i = 0; i < eligibility.size(); ++i) {
                 eligibility[i] += (previous_state[i] / sqrt(2));
             }
-            
+
             for (int i = 0; i < weight.size(); ++i) {
                 weight[i] += learn_rate*eligibility[i]*td_error;
             }
-            
+
             bias += learn_rate * td_error;
 
             previous_location = current_location;
@@ -169,7 +169,7 @@ int main() {
             previous_memory   = current_memory;
             previous_signal   = current_signal;
             previous_value    = current_value;
-            
+
             current_signal = memory[0];          // Turning off the signal
 
             // Choosing the next move
@@ -179,7 +179,7 @@ int main() {
                                       current_signal,
                                       current_memory,
                                       weight);
-            
+
             switch(next_move) {
                 case Left:
                     current_location = getLeft(current_location);

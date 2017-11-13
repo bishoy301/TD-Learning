@@ -77,7 +77,7 @@ for i in range(0, 5000):
             rightLocation = 0
 
         if leftLocation == -1:
-            leftLocation =currentReward = reward[currentLocation] worldSize - 1
+            leftLocation = worldSize - 1
 
         leftValue = np.dot(world[leftLocation, ], weights) + bias
         rightValue = np.dot(world[rightLocation, ], weights) + bias
