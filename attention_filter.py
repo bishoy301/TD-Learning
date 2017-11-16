@@ -13,11 +13,15 @@ worldSize = 20
 redGoal = 0 #randrange(0, worldSize)
 greenGoal = floor(worldSize / 2) #randrange(0, worldSize)
 lengthHRR = 1024
-signalNumber = 3
+signalNumber = 4
 goal = 1.0
 
-colorDimension = 1.0
-stateDimension = 0.0
+isWM = True
+dimensions = []
+dimensions.append(1.0)
+dimensions.append(0.0)
+update_dim = None
+
 candidateThreshold = 0.1
 
 epsilon_a = 0.03
@@ -44,6 +48,19 @@ for i in range(1, signalNumber):
     signals[i, :] = hrr.hrr(lengthHRR, normalized=True)
     memory[i, :] = hrr.hrr(lengthHRR, normalized=True)
 
+
+def getState(location, task, mem):
+    State = hrr.convolve(hrr.convolve(world[location, :], signals[task, :]), memory[mem, :])
+    return State
+
+def getValue(location, state, mem):
+    if mem:
+        Value = np.dot(state, weights) + bias
+        return Value
+
+    Value = np.dot(world[location,:], weights) + bias
+    return Value
+
 for episode in range(1, 10000):
 
     print("This is a new episode. Number {}".format(episode))
@@ -67,9 +84,14 @@ for episode in range(1, 10000):
 
     for timestep in range(1, 100):
 
+        if dimensions[0] == 0.0 and dimensions[1] == 0.0:
+            isWM = False
+
         currentReward = reward[currentSignal, currentLocation]
-        currentState = hrr.convolve(hrr.convolve(world[currentLocation, :], signals[currentTask, :]), memory[workingMemory, :])
-        currentValue = np.dot(currentState, weights) + bias
+        #currentState = hrr.convolve(hrr.convolve(world[currentLocation, :], signals[currentTask, :]), memory[workingMemory, :])
+        currentState = getState(currentLocation, currentTask, workingMemory)
+        #currentValue = np.dot(currentState, weights) + bias
+        currentValue = getValue(currentLocation, currentState, isWM)
 
         # store previous information
         previousLocation = currentLocation
@@ -82,12 +104,15 @@ for episode in range(1, 10000):
         # -----------------------------------------Working Memory update process----------------------------------------------
 
         # Threshold determines possible candidates for working memory mechanism
-        if stateDimension < candidateThreshold:
+        if dimensions[1] < candidateThreshold:
             memoryCandidates = np.array([signals[0, :], memory[workingMemory, :], signals[currentTask, :]])
-        elif colorDimension < candidateThreshold:
+            mem = 1
+        elif dimensions[0] < candidateThreshold:
             memoryCandidates = np.array([signals[0, :], world[currentLocation, :], memory[workingMemory, :]])
+            mem = 2
         else:
             memoryCandidates = np.array([signals[0, :], world[currentLocation, :], memory[workingMemory, :], signals[currentTask, :]])
+            mem = 3
 
         candidateValues = []
 
@@ -102,22 +127,57 @@ for episode in range(1, 10000):
             workingMemory = randint(0, 2)
             print("Epsilon! Working Memory")
         else:
-            if bestCandidate == 0:
-                workingMemory = 0
-            elif bestCandidate == 2:
-                workingMemory = currentTask
+            if mem == 1:
+                if bestCandidate == 0:
+                    workingMemory = 0
+                elif bestCandidate == 1:
+                    if workingMemory == 1 or workingMemory == 2:
+                        update_dim = 0
+                    elif workingMemory == 3:
+                        update_dim = 1
+                    workingMemory = workingMemory
+                elif bestCandidate == 2:
+                    workingMemory = currentTask
+            elif mem == 2:
+                    if bestCandidate == 0:
+                        workingMemory = 0
+                    elif bestCandidate == 1:
+                        workingMemory = 3
+                    elif bestCandidate == 2:
+                        if workingMemory == 1 or workingMemory == 2:
+                            update_dim = 0
+                        elif workingMemory == 3:
+                            update_dim = 1
+                        workingMemory = workingMemory
+            elif mem == 3:
+                    if bestCandidate == 0:
+                        workingMemory = 0
+                    elif bestCandidate == 1:
+                        workingMemory = 3
+                    elif bestCandidate == 2:
+                        if workingMemory == 1 or workingMemory == 2:
+                            update_dim = 0
+                        elif workingMemory == 3:
+                            update_dim = 1
+                        workingMemory = workingMemory
+                    elif bestCandidate == 3:
+                        workingMemory = currentTask
 
         print(candidateValues)
 
         print(bestCandidate)
 
-        currentState = hrr.convolve(hrr.convolve(world[currentLocation, :], signals[currentTask, :]), memory[workingMemory, :])
-        currentValue = np.dot(currentState, weights) + bias
+        #currentState = hrr.convolve(hrr.convolve(world[currentLocation, :], signals[currentTask, :]), memory[workingMemory, :])
+        currentState = getState(currentLocation, currentTask, workingMemory)
+        #currentValue = np.dot(currentState, weights) + bias
+        currentValue = getValue(currentLocation, currentState, isWM)
 
         if reward[currentSignal, currentLocation] == goal:
             td_error = currentValue - previousValue
             eligibility = eligibility + (previousState)
             weights = weights + (lrate * eligibility * td_error)
+            if update_dim is not None:
+                dimensions[update_dim] = dimensions[update_dim] * td_error
             #bias = bias + (lrate*td_error)
             print("Reward at current location is {}".format(reward[currentSignal, currentLocation]))
 
@@ -156,11 +216,15 @@ for episode in range(1, 10000):
         if leftLocation == -1:
             leftLocation = worldSize - 1
 
-        leftState = hrr.convolve(hrr.convolve(world[leftLocation, :], signals[currentTask, :]), memory[workingMemory, :])
-        rightState = hrr.convolve(hrr.convolve(world[rightLocation, :], signals[currentTask, :]), memory[workingMemory, :])
+        #leftState = hrr.convolve(hrr.convolve(world[leftLocation, :], signals[currentTask, :]), memory[workingMemory, :])
+        leftState = getState(leftLocation, currentTask, workingMemory)
+        #rightState = hrr.convolve(hrr.convolve(world[rightLocation, :], signals[currentTask, :]), memory[workingMemory, :])
+        rightState = getState(rightLocation, currentTask, workingMemory)
 
-        leftValue = np.dot(leftState, weights) + bias
-        rightValue = np.dot(rightState, weights) + bias
+        #leftValue = np.dot(leftState, weights) + bias
+        leftValue = getValue(leftLocation, leftState, isWM)
+        #rightValue = np.dot(rightState, weights) + bias
+        rightValue = getValue(rightLocation, rightState, isWM)
 
         previousLocation = currentLocation
         previousValue = currentValue
@@ -181,8 +245,10 @@ for episode in range(1, 10000):
             else:
                 currentLocation = leftLocation
 
-        currentState = hrr.convolve(hrr.convolve(world[currentLocation, :], signals[currentTask, :]), memory[workingMemory, :])
-        currentValue = np.dot(currentState, weights) + bias
+        #currentState = hrr.convolve(hrr.convolve(world[currentLocation, :], signals[currentTask, :]), memory[workingMemory, :])
+        currentState = getState(currentLocation, currentTask, workingMemory)
+        #currentValue = np.dot(currentState, weights) + bias
+        currentValue = getValue(currentLocation, currentState, isWM)
 
         td_error = (currentReward + gamma * currentValue) - previousValue
         eligibility = eligibility + (previousState)
