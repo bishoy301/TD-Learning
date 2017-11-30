@@ -7,7 +7,7 @@ import numpy as np
 
 bias = 1
 gamma = 0.9
-lrate = 0.1
+lrate = 0.01
 td_lambda = 0.3
 worldSize = 20
 redGoal = 0 #randrange(0, worldSize)
@@ -18,8 +18,8 @@ goal = 1.0
 
 isWM = True
 dimensions = []
-dimensions.append(1.0)
-dimensions.append(0.0)
+dimensions.append(1.0) #color dimension
+dimensions.append(1.0) #state dimension
 update_dim = None
 
 candidateThreshold = 0.1
@@ -61,7 +61,7 @@ def getValue(location, state, mem):
     Value = np.dot(world[location,:], weights) + bias
     return Value
 
-for episode in range(1, 10000):
+for episode in range(1, 100000):
 
     print("This is a new episode. Number {}".format(episode))
     print("  ")
@@ -176,9 +176,6 @@ for episode in range(1, 10000):
             td_error = currentValue - previousValue
             eligibility = eligibility + (previousState)
             weights = weights + (lrate * eligibility * td_error)
-            if update_dim is not None:
-                dimensions[update_dim] = dimensions[update_dim] * td_error
-            #bias = bias + (lrate*td_error)
             print("Reward at current location is {}".format(reward[currentSignal, currentLocation]))
 
             print("Found Goal! At state {} with a value of {}".format(currentLocation, currentValue))
@@ -187,12 +184,18 @@ for episode in range(1, 10000):
             td_error = currentReward - currentValue
             eligibility = eligibility + (previousState)
             weights = weights + (lrate * eligibility * td_error)
+            if update_dim is not None:
+                dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+
             #bias = bias + (lrate*td_error)
             break
 
         td_error = currentValue - previousValue
         eligibility = eligibility + (previousState)
         weights = weights + (lrate * eligibility * td_error)
+        if update_dim is not None:
+            dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+
         #bias = bias + (lrate*td_error)
 
         previousLocation = currentLocation
@@ -253,6 +256,9 @@ for episode in range(1, 10000):
         td_error = (currentReward + gamma * currentValue) - previousValue
         eligibility = eligibility + (previousState)
         weights = weights + (lrate * eligibility * td_error)
+        if update_dim is not None:
+            dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+
         #bias = bias + (lrate*td_error)
         print("The td_error is {}".format(td_error))
 
