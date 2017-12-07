@@ -7,7 +7,7 @@ import numpy as np
 
 bias = 1
 gamma = 0.9
-lrate = 0.01
+lrate = 0.1
 td_lambda = 0.3
 worldSize = 20
 redGoal = 0 #randrange(0, worldSize)
@@ -18,8 +18,8 @@ goal = 1.0
 
 isWM = True
 dimensions = []
-dimensions.append(1.0) #color dimension
-dimensions.append(1.0) #state dimension
+dimensions.append(0.0) #color dimension
+dimensions.append(0.0) #state dimension
 update_dim = None
 
 candidateThreshold = 0.1
@@ -61,7 +61,7 @@ def getValue(location, state, mem):
     Value = np.dot(world[location,:], weights) + bias
     return Value
 
-for episode in range(1, 100000):
+for episode in range(1, 10000):
 
     print("This is a new episode. Number {}".format(episode))
     print("  ")
@@ -73,6 +73,8 @@ for episode in range(1, 100000):
     print("  ")
     print("  ")
 
+    print("The color weight is {} and the state weight is {}".format(dimensions[0], dimensions[1]))
+
     eligibility = np.zeros(lengthHRR)
 
     currentLocation = randrange(0, worldSize)
@@ -83,9 +85,6 @@ for episode in range(1, 100000):
     currentSignal = currentTask
 
     for timestep in range(1, 100):
-
-        if dimensions[0] == 0.0 and dimensions[1] == 0.0:
-            isWM = False
 
         currentReward = reward[currentSignal, currentLocation]
         #currentState = hrr.convolve(hrr.convolve(world[currentLocation, :], signals[currentTask, :]), memory[workingMemory, :])
@@ -102,7 +101,18 @@ for episode in range(1, 100000):
         eligibility = td_lambda * eligibility
 
         # -----------------------------------------Working Memory update process----------------------------------------------
+        memoryCandidates = np.array([signals[0, :], memory[workingMemory, :]])
 
+        color = None
+
+        if dimensions[0] > candidateThreshold:
+            memoryCandidates = np.vstack([memoryCandidates, signals[currentTask, :]])
+            color = True
+
+        if dimensions[1] > candidateThreshold:
+            memoryCandidates = np.vstack([memoryCandidates, world[currentLocation, :]])
+            state = True
+        '''
         # Threshold determines possible candidates for working memory mechanism
         if dimensions[1] < candidateThreshold:
             memoryCandidates = np.array([signals[0, :], memory[workingMemory, :], signals[currentTask, :]])
@@ -113,7 +123,7 @@ for episode in range(1, 100000):
         else:
             memoryCandidates = np.array([signals[0, :], world[currentLocation, :], memory[workingMemory, :], signals[currentTask, :]])
             mem = 3
-
+        '''
         candidateValues = []
 
         # Establishing the best candidate for working memory
@@ -127,6 +137,22 @@ for episode in range(1, 100000):
             workingMemory = randint(0, 2)
             print("Epsilon! Working Memory")
         else:
+            if bestCandidate == 0:
+                workingMemory = 0
+            if bestCandidate == 1:
+                workingMemory = workingMemory
+                if workingMemory == 1 or workingMemory == 2:
+                    update_dim = 0
+            if bestCandidate == 2 and color == True:
+                workingMemory = currentTask
+                update_dim = 0
+            elif bestCandidate == 2 and state == True:
+                workingMemory = 3
+                update_dim = 1
+            if bestCandidate == 3:
+                workingMemory = 3
+                update_dim = 1
+                '''
             if mem == 1:
                 if bestCandidate == 0:
                     workingMemory = 0
@@ -162,6 +188,7 @@ for episode in range(1, 100000):
                         workingMemory = workingMemory
                     elif bestCandidate == 3:
                         workingMemory = currentTask
+            '''
 
         print(candidateValues)
 
@@ -184,8 +211,8 @@ for episode in range(1, 100000):
             td_error = currentReward - currentValue
             eligibility = eligibility + (previousState)
             weights = weights + (lrate * eligibility * td_error)
-            if update_dim is not None:
-                dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+            #if update_dim is not None:
+                #dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
 
             #bias = bias + (lrate*td_error)
             break
@@ -193,8 +220,8 @@ for episode in range(1, 100000):
         td_error = currentValue - previousValue
         eligibility = eligibility + (previousState)
         weights = weights + (lrate * eligibility * td_error)
-        if update_dim is not None:
-            dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+        #if update_dim is not None:
+            #dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
 
         #bias = bias + (lrate*td_error)
 
@@ -256,8 +283,8 @@ for episode in range(1, 100000):
         td_error = (currentReward + gamma * currentValue) - previousValue
         eligibility = eligibility + (previousState)
         weights = weights + (lrate * eligibility * td_error)
-        if update_dim is not None:
-            dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+        #if update_dim is not None:
+            #dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
 
         #bias = bias + (lrate*td_error)
         print("The td_error is {}".format(td_error))
