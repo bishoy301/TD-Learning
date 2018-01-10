@@ -20,6 +20,8 @@ goal = 1.0
 isWM = True
 color_graph = []
 state_graph = []
+episode_average = []
+window_size = 100
 dimensions = []
 dimensions.append(30.0) #color dimension
 dimensions.append(30.0) #state dimension
@@ -227,17 +229,19 @@ for episode in range(1, 10000):
             td_error = currentReward - currentValue
             eligibility = eligibility + (previousState)
             weights = weights + (lrate * eligibility * td_error)
-            #if update_dim is not None:
-                #dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+            if update_dim is not None:
+                dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
 
             #bias = bias + (lrate*td_error)
+
+            episode_average.append(timestep)
             break
 
         td_error = currentValue - previousValue
         eligibility = eligibility + (previousState)
         weights = weights + (lrate * eligibility * td_error)
-        #if update_dim is not None:
-            #dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+        if update_dim is not None:
+            dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
 
         #bias = bias + (lrate*td_error)
 
@@ -299,12 +303,16 @@ for episode in range(1, 10000):
         td_error = (currentReward + gamma * currentValue) - previousValue
         eligibility = eligibility + (previousState)
         weights = weights + (lrate * eligibility * td_error)
-        #if update_dim is not None:
-            #dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+        if update_dim is not None:
+            dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
 
         #bias = bias + (lrate*td_error)
         print("The td_error is {}".format(td_error))
 
+
+# Calculating simple moving average
+average = np.repeat(1.0, window_size) / window_size
+smas = np.convolve(episode_average, average, 'valid')
 
 # Plotting the data
 
@@ -354,7 +362,9 @@ plt.ylabel('Value')
 plt.xlabel('States')
 plt.show()
 
-plt.plot(color_graph, 'r--', state_graph, 'b--')
+plt.plot(smas, 'r--')
 plt.show()
+#plt.plot(color_graph, 'r--', state_graph, 'b--')
+#plt.show()
 
 
