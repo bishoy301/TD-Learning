@@ -13,23 +13,26 @@ worldSize = 20
 redGoal = 0 #randrange(0, worldSize)
 greenGoal = floor(worldSize / 2) #randrange(0, worldSize)
 lengthHRR = 1024
-signalNumber = 4
+signalNumber = 3
+memNumber = 23
 goal = 1.0
 
 isWM = True
+color_graph = []
+state_graph = []
 dimensions = []
-dimensions.append(0.0) #color dimension
-dimensions.append(0.0) #state dimension
+dimensions.append(30.0) #color dimension
+dimensions.append(30.0) #state dimension
 update_dim = None
 
-candidateThreshold = 0.1
+candidateThreshold = 0.0
 
 epsilon_a = 0.03
 epsilon_wm = 0.03
 
 world = np.zeros([worldSize, lengthHRR])
 signals = np.zeros([signalNumber, lengthHRR])
-memory = np.zeros([signalNumber, lengthHRR])
+memory = np.zeros([memNumber, lengthHRR])
 eligibility = np.zeros(lengthHRR)
 reward = np.zeros([signalNumber, worldSize])
 
@@ -48,6 +51,8 @@ for i in range(1, signalNumber):
     signals[i, :] = hrr.hrr(lengthHRR, normalized=True)
     memory[i, :] = hrr.hrr(lengthHRR, normalized=True)
 
+for i in range(3, memNumber):
+    memory[i, :] = world[i-3, :]
 
 def getState(location, task, mem):
     State = hrr.convolve(hrr.convolve(world[location, :], signals[task, :]), memory[mem, :])
@@ -75,6 +80,10 @@ for episode in range(1, 10000):
 
     print("The color weight is {} and the state weight is {}".format(dimensions[0], dimensions[1]))
 
+    if episode % 100 == 0:
+        color_graph.append(dimensions[0])
+        state_graph.append(dimensions[1])
+
     eligibility = np.zeros(lengthHRR)
 
     currentLocation = randrange(0, worldSize)
@@ -101,9 +110,11 @@ for episode in range(1, 10000):
         eligibility = td_lambda * eligibility
 
         # -----------------------------------------Working Memory update process----------------------------------------------
-        memoryCandidates = np.array([signals[0, :], memory[workingMemory, :]])
-
         color = None
+        memoryCandidates = np.array([signals[0, :]])
+
+        if dimensions[0] > candidateThreshold or dimensions[1] > candidateThreshold:
+            memoryCandidates = np.vstack([memoryCandidates, memory[workingMemory, :]])
 
         if dimensions[0] > candidateThreshold:
             memoryCandidates = np.vstack([memoryCandidates, signals[currentTask, :]])
@@ -128,6 +139,9 @@ for episode in range(1, 10000):
 
         # Establishing the best candidate for working memory
         for row in range(memoryCandidates.shape[0]):
+            if dimensions[0] == 0.0 and dimensions[1] == 0.0:
+                candidateValues.append(np.dot(world[currentLocation,:], weights) + bias)
+                break
             candidateState = hrr.convolve(hrr.convolve(world[currentLocation, :], signals[currentTask, :]), memoryCandidates[row, :])
             candidateValues.append(np.dot(candidateState, weights) + bias)
 
@@ -143,14 +157,16 @@ for episode in range(1, 10000):
                 workingMemory = workingMemory
                 if workingMemory == 1 or workingMemory == 2:
                     update_dim = 0
+                elif workingMemory > 2:
+                    update_dim = 1
             if bestCandidate == 2 and color == True:
                 workingMemory = currentTask
                 update_dim = 0
             elif bestCandidate == 2 and state == True:
-                workingMemory = 3
+                workingMemory = currentLocation + 3
                 update_dim = 1
             if bestCandidate == 3:
-                workingMemory = 3
+                workingMemory = currentLocation + 3
                 update_dim = 1
                 '''
             if mem == 1:
@@ -336,6 +352,9 @@ plt.plot(s0_w0, 'r--', s0_w1, 'b--', s0_w2, 'g--', s1_w0, 'c--', s1_w1, 'm--', s
 #plt.axis(0, 19, 0, 1)
 plt.ylabel('Value')
 plt.xlabel('States')
+plt.show()
+
+plt.plot(color_graph, 'r--', state_graph, 'b--')
 plt.show()
 
 
