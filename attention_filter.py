@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import hrr
 import numpy as np
 
-
 bias = 1
 gamma = 0.9
 lrate = 0.1
@@ -24,7 +23,7 @@ episode_average = []
 window_size = 100
 dimensions = []
 dimensions.append(30.0) #color dimension
-dimensions.append(30.0) #state dimension
+dimensions.append(0.0) #state dimension
 update_dim = None
 
 candidateThreshold = 0.0
@@ -70,17 +69,17 @@ def getValue(location, state, mem):
 
 for episode in range(1, 10000):
 
-    print("This is a new episode. Number {}".format(episode))
-    print("  ")
-    print("  ")
-    print("  ")
-    print("  ")
-    print("  ")
-    print("  ")
-    print("  ")
-    print("  ")
+    #print("This is a new episode. Number {}".format(episode))
+    #print("  ")
+    #print("  ")
+    #print("  ")
+    #print("  ")
+    #print("  ")
+    #print("  ")
+    #print("  ")
+    #print("  ")
 
-    print("The color weight is {} and the state weight is {}".format(dimensions[0], dimensions[1]))
+    #print("The color weight is {} and the state weight is {}".format(dimensions[0], dimensions[1]))
 
     if episode % 100 == 0:
         color_graph.append(dimensions[0])
@@ -151,7 +150,7 @@ for episode in range(1, 10000):
 
         if random() < epsilon_wm:
             workingMemory = randint(0, 2)
-            print("Epsilon! Working Memory")
+            #print("Epsilon! Working Memory")
         else:
             if bestCandidate == 0:
                 workingMemory = 0
@@ -208,9 +207,9 @@ for episode in range(1, 10000):
                         workingMemory = currentTask
             '''
 
-        print(candidateValues)
+        #print(candidateValues)
 
-        print(bestCandidate)
+        #print(bestCandidate)
 
         #currentState = hrr.convolve(hrr.convolve(world[currentLocation, :], signals[currentTask, :]), memory[workingMemory, :])
         currentState = getState(currentLocation, currentTask, workingMemory)
@@ -221,16 +220,16 @@ for episode in range(1, 10000):
             td_error = currentValue - previousValue
             eligibility = eligibility + (previousState)
             weights = weights + (lrate * eligibility * td_error)
-            print("Reward at current location is {}".format(reward[currentSignal, currentLocation]))
+            #print("Reward at current location is {}".format(reward[currentSignal, currentLocation]))
 
-            print("Found Goal! At state {} with a value of {}".format(currentLocation, currentValue))
-            print("The td_error is {}".format(td_error))
+            #print("Found Goal! At state {} with a value of {}".format(currentLocation, currentValue))
+            #print("The td_error is {}".format(td_error))
 
             td_error = currentReward - currentValue
             eligibility = eligibility + (previousState)
             weights = weights + (lrate * eligibility * td_error)
-            if update_dim is not None:
-                dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+            #if update_dim is not None:
+                #dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
 
             #bias = bias + (lrate*td_error)
 
@@ -240,8 +239,8 @@ for episode in range(1, 10000):
         td_error = currentValue - previousValue
         eligibility = eligibility + (previousState)
         weights = weights + (lrate * eligibility * td_error)
-        if update_dim is not None:
-            dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+        #if update_dim is not None:
+            #dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
 
         #bias = bias + (lrate*td_error)
 
@@ -251,7 +250,7 @@ for episode in range(1, 10000):
         previousTask = currentTask
         previousValue = currentValue
 
-        print("The current value of state {} during task {} with current signal of {} and a working memory of {} is {}".format(currentLocation, currentSignal, currentTask, bestCandidate, currentValue))
+        #print("The current value of state {} during task {} with current signal of {} and a working memory of {} is {}".format(currentLocation, currentSignal, currentTask, bestCandidate, currentValue))
 
         currentTask = 0
 
@@ -279,19 +278,19 @@ for episode in range(1, 10000):
         previousLocation = currentLocation
         previousValue = currentValue
 
-        print("Right is state {} with a value of {}".format(rightLocation, rightValue))
-        print("Left is state {} with a value of {}".format(leftLocation, leftValue))
+        #print("Right is state {} with a value of {}".format(rightLocation, rightValue))
+        #print("Left is state {} with a value of {}".format(leftLocation, leftValue))
 
         if leftValue <= rightValue:
             if random() < epsilon_a:
                 currentLocation = leftLocation
-                print("Epsilon! Moving.")
+                #print("Epsilon! Moving.")
             else:
                 currentLocation = rightLocation
         elif rightValue < leftValue:
             if random() < epsilon_a:
                 currentLocation = rightLocation
-                print("Epsilon! Moving")
+                #print("Epsilon! Moving")
             else:
                 currentLocation = leftLocation
 
@@ -303,16 +302,17 @@ for episode in range(1, 10000):
         td_error = (currentReward + gamma * currentValue) - previousValue
         eligibility = eligibility + (previousState)
         weights = weights + (lrate * eligibility * td_error)
-        if update_dim is not None:
-            dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
+        #if update_dim is not None:
+            #dimensions[update_dim] = dimensions[update_dim] + (lrate * td_error)
 
         #bias = bias + (lrate*td_error)
-        print("The td_error is {}".format(td_error))
+        #print("The td_error is {}".format(td_error))
 
 
 # Calculating simple moving average
 average = np.repeat(1.0, window_size) / window_size
 smas = np.convolve(episode_average, average, 'valid')
+
 
 # Plotting the data
 
@@ -362,7 +362,9 @@ plt.ylabel('Value')
 plt.xlabel('States')
 plt.show()
 
-plt.plot(smas, 'r--')
+plt.plot(moving_average(episode_average, window_size), 'r--')
+plt.ylabel('Average timesteps per episode')
+plt.xlabel('Episode')
 plt.show()
 #plt.plot(color_graph, 'r--', state_graph, 'b--')
 #plt.show()
