@@ -310,9 +310,11 @@ for episode in range(1, 10000):
 
 
 # Calculating simple moving average
-average = np.repeat(1.0, window_size) / window_size
-smas = np.convolve(episode_average, average, 'valid')
-
+#average = np.repeat(1.0, window_size) / window_size
+#smas = np.convolve(episode_average, average, 'valid')
+def running_mean(episode_average, window_size):
+    cumsum = np.cumsum(np.insert(episode_average, 0, 0))
+    return (cumsum[window_size: ] - cumsum[ : -window_size]) / float(window_size)
 
 # Plotting the data
 
@@ -362,7 +364,7 @@ plt.ylabel('Value')
 plt.xlabel('States')
 plt.show()
 
-plt.plot(moving_average(episode_average, window_size), 'r--')
+plt.plot(running_mean(episode_average, window_size), 'r--')
 plt.ylabel('Average timesteps per episode')
 plt.xlabel('Episode')
 plt.show()
